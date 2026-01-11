@@ -1,7 +1,11 @@
 streamlit
 pandas
+numpy
 matplotlib
 tensorflow
 numpy
 Pillow
 gdown
+scikit-learn
+scikit-image
+opencv-python-headless
