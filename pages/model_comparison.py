@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 def app():
     st.title("📊 Model Performance Comparison")
 
+
     # =====================================================
     # 1. Pretraining Strategy Comparison (Transfer Learning)
     # =====================================================
@@ -122,3 +123,6 @@ def app():
     - XGBoost and SVC provide the highest precision among classical models
     """)
 
+
+# Streamlit runs page files directly; render the page automatically.
+app()
