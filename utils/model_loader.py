@@ -82,12 +82,12 @@ def get_model_path() -> str:
     url = gdrive_ref if "drive.google.com" in gdrive_ref else f"https://drive.google.com/uc?id={gdrive_ref}"
 
     if st is not None:
-        st.info("⬇️ Downloading model from Google Drive...")
+        st.info("⬇️ Downloading model from Google Drive.")
 
     # fuzzy=True lets gdown handle various Drive URL formats, including /file/d/... links.
     try:
         out = gdown.download(url, str(model_path), quiet=False, fuzzy=True)
-        st.info("Model Downloaded Succesfuly ✅.")
+        # st.info("Model Downloaded Succesfuly ✅.")
 
     except Exception as e:
         raise RuntimeError(
