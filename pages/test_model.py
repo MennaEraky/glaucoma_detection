@@ -7,7 +7,7 @@ from utils.model_loader import get_model_path
 IMG_SIZE = (224, 224)
 
 def app():
-    st.title("🖼️ Test Glaucoma Detection Model")
+    st.title("🖼️ Test Glaucoma Detection ResNet50_Fundus Model")
 
 
     @st.cache_resource
