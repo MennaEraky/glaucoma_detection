@@ -1,72 +1,72 @@
-import streamlit as st
-import numpy as np
-from PIL import Image
+import os
+from pathlib import Path
 
-from utils.model_loader import get_model_path
-
-IMG_SIZE = (224, 224)
-
-def app():
-    st.title("🖼️ Test Glaucoma Detection Model")
+try:
+    import streamlit as st
+except Exception:  # pragma: no cover
+    st = None
 
 
-    @st.cache_resource
-    def load_model():
-        # Lazy-import tensorflow so the UI can still load even if TF isn't installed.
-        try:
-            import tensorflow as tf  # type: ignore
-        except ModuleNotFoundError as e:
-            raise RuntimeError(
-                "TensorFlow is not installed. Install it to enable predictions."
-            ) from e
+# Default model location (relative to repo root)
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+_DEFAULT_MODEL_PATH = _REPO_ROOT / "models" / "LAST_glaucoma_model.keras"
 
-        model_path = get_model_path()
-        return tf.keras.models.load_model(model_path)
+# Google Drive model reference for optional auto-download.
+# Can be either a file id ("...") or a full share link ("https://drive.google.com/file/d/.../view?...").
+GDRIVE_MODEL_REF = "1OAZgc2VA9DBXALdDItvhVt-JFGeNT5JI"
 
-    def preprocess_image(image: Image.Image):
-        image = image.convert("RGB").resize(IMG_SIZE)
-        arr = np.array(image) / 255.0
-        return np.expand_dims(arr, axis=0)
 
-    # Load model with friendly error handling (don't crash the whole app).
+def _cache_resource_if_available(fn):
+    if st is not None:
+        return st.cache_resource(fn)
+    return fn
+
+
+@_cache_resource_if_available
+def get_model_path() -> str:
+    """
+    Returns a local filesystem path to the trained model.
+
+
+    Priority:
+    1) GLAUCOMA_MODEL_PATH env var (if set)
+    2) ./models/LAST_glaucoma_model.keras (repo-relative)
+
+    If missing, attempts a Google Drive download **only** if `gdown` is installed.
+    Otherwise, raises FileNotFoundError with a helpful message.
+    """
+    env_path = os.getenv("GLAUCOMA_MODEL_PATH")
+    model_path = Path(env_path).expanduser().resolve() if env_path else _DEFAULT_MODEL_PATH
+
+    if model_path.exists():
+        return str(model_path)
+
+    model_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Try optional download path (kept non-fatal if gdown is missing)
     try:
-        model = load_model()
-    except Exception as e:
-        st.error("Model is not available yet, so predictions are disabled.")
-        st.code(str(e))
-        st.caption("Tip: set env var `GLAUCOMA_MODEL_PATH` to a local .keras file.")
-        st.stop()
+        import gdown  # lazy import so app can start without it
+    except ModuleNotFoundError:
+        raise FileNotFoundError(
+            "Model file not found.\n"
+            f"- Looked for: {model_path}\n"
+            "- Fix: either place the .keras file there, or set env var GLAUCOMA_MODEL_PATH.\n"
+            "- Optional: `pip install gdown` to enable auto-download."
+        )
 
-    uploaded_file = st.file_uploader(
-        "Upload a retinal fundus image",
-        type=["jpg", "jpeg", "png"]
-    )
+    # Allow overriding the download reference via env var, and support full share links.
+    gdrive_ref = os.getenv("GLAUCOMA_MODEL_GDRIVE_URL") or GDRIVE_MODEL_REF
+    url = gdrive_ref if "drive.google.com" in gdrive_ref else f"https://drive.google.com/uc?id={gdrive_ref}"
+    if st is not None:
+        st.info("⬇️ Downloading model from Google Drive...")
+    # fuzzy=True lets gdown handle various Drive URL formats, including /file/d/... links.
+    gdown.download(url, str(model_path), quiet=False, fuzzy=True)
 
-    if uploaded_file:
-        image = Image.open(uploaded_file)
-        st.image(image, use_container_width=True)
+    if not model_path.exists():
+        raise FileNotFoundError(
+            "Model download did not produce a file.\n"
+            f"- Expected at: {model_path}\n"
+            "- Fix: download/copy the model manually, or verify the Google Drive file id."
+        )
 
-        if st.button("🔍 Predict"):
-            with st.spinner("Analyzing image..."):
-                x = preprocess_image(image)
-                y = model.predict(x)
-                # Support common binary output shapes: (1,1) or (1,)
-                prob = float(np.ravel(y)[0])
-
-            label = "Glaucoma" if prob >= 0.5 else "Normal"
-            confidence = prob if prob >= 0.5 else 1 - prob
-
-            st.subheader("Prediction Result")
-            st.write(f"**Prediction:** `{label}`")
-            st.write(f"**Confidence:** `{confidence:.2%}`")
-
-            if label == "Glaucoma":
-                st.error("⚠️ Signs of glaucoma detected")
-            else:
-                st.success("✅ Normal fundus detected")
-
-    st.caption("⚕️ For research purposes only – not a medical diagnosis.")
-
-
-# Streamlit runs page files directly; render the page automatically.
-app()
+    return str(model_path)
