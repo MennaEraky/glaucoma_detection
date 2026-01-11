@@ -49,14 +49,20 @@
 
 # st.caption("⚕️ For research purposes only – not a medical diagnosis.")
 # pages/test_model.py
-
+# pages/test_model.py
 import streamlit as st
-from utils.model_loader import load_model
 from PIL import Image
 import numpy as np
-from skimage.feature import local_binary_pattern
+from utils.model_loader import load_model
 
-def app():
+IMG_SIZE = (224, 224)
+
+def preprocess_image(image: Image.Image):
+    image = image.convert("RGB").resize(IMG_SIZE)
+    arr = np.array(image) / 255.0
+    return np.expand_dims(arr, axis=0)
+
+def app():   # <-- THIS IS CRUCIAL
     st.title("🖼️ Test Glaucoma Detection Model")
 
     model = load_model()
@@ -71,11 +77,8 @@ def app():
         st.image(image, use_container_width=True)
 
         if st.button("🔍 Predict"):
-            features = extract_features(image)
-            if hasattr(model, "predict_proba"):
-                prob = model.predict_proba(features)[0][1]
-            else:
-                prob = model.predict(features)[0]
+            x = preprocess_image(image)
+            prob = model.predict(x)[0][0]
 
             label = "Glaucoma" if prob >= 0.5 else "Normal"
             confidence = prob if label == "Glaucoma" else 1 - prob
