@@ -26,6 +26,7 @@ def get_model_path() -> str:
     """
     Returns a local filesystem path to the trained model.
 
+
     Priority:
     1) GLAUCOMA_MODEL_PATH env var (if set)
     2) ./models/LAST_glaucoma_model.keras (repo-relative)
