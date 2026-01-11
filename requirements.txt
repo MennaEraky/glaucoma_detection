@@ -1,6 +1,7 @@
 streamlit
-tensorflow
-numpy
 pandas
 matplotlib
-pillow
+tensorflow
+numpy
+Pillow
+gdown
