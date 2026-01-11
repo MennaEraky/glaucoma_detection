@@ -37,7 +37,10 @@ def get_model_path() -> str:
     Otherwise, raises FileNotFoundError with a helpful message.
     """
     env_path = os.getenv("GLAUCOMA_MODEL_PATH")
-   
+    model_path = Path(env_path).expanduser().resolve() if env_path else _DEFAULT_MODEL_PATH
+
+    if model_path.exists():
+        return str(model_path)
 
     # Allow overriding the download reference via env var, and support full share links.
     gdrive_ref = os.getenv("GLAUCOMA_MODEL_GDRIVE_URL") or GDRIVE_MODEL_REF
