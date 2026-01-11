@@ -41,10 +41,12 @@ def app():
     )
 
     fig3, ax3 = plt.subplots(figsize=(8, 5))
-    ax3.bar(df_classical["Model"], df_classical[metric_classical], color="green")
+    # Use `Pair` instead of `Model` here because multiple rows share the same model name (e.g., SVC)
+    # and the real comparison is between (features | model) pairs.
+    ax3.bar(df_classical["Pair"], df_classical[metric_classical], color="green")
     ax3.set_ylabel(metric_classical)
     ax3.set_title(f"{metric_classical} – Classical ML Comparison")
-    plt.xticks(rotation=30)
+    plt.xticks(rotation=35, ha="right")
     plt.tight_layout()
     st.pyplot(fig3)
 
@@ -68,7 +70,7 @@ def app():
     st.dataframe(df_arch, use_container_width=True)
 
     metric_arch = st.selectbox(
-        "Select metric (Transfer Learning Models (ImageNet)",
+        "Select metric (Transfer Learning Models (ImageNet))",
         ["Accuracy", "Precision", "Recall", "F1", "AUC"]
     )
 
@@ -138,6 +140,8 @@ def app():
 
     df_classical_all = df_classical.rename(columns={"F1_Score": "F1"}).copy()
     df_classical_all["Category"] = "Classical ML"
+    # Compare classical methods by `Pair` (features|model), not by model name alone.
+    df_classical_all["Model"] = df_classical_all["Pair"]
 
     # Normalize to a common schema
     common_cols = ["Accuracy", "Precision", "Recall", "F1", "AUC"]
@@ -180,8 +184,8 @@ def app():
     fig4, ax4 = plt.subplots(figsize=(10, 5))
     colors = df_plot["Category"].map(
         {
-            "Transfer Learning Medical Weight": "skyblue",
-            "Transfer Learning Imagenet": "orange",
+            "Transfer Learning Models Medical Weights ": "skyblue",
+            "Transfer Learning Models  (ImageNet)": "orange",
             "Classical ML": "green",
         }
     ).fillna("gray")
