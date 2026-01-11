@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import gdown  # lazy import so app can start without it
 
 try:
     import streamlit as st
@@ -36,23 +37,7 @@ def get_model_path() -> str:
     Otherwise, raises FileNotFoundError with a helpful message.
     """
     env_path = os.getenv("GLAUCOMA_MODEL_PATH")
-    model_path = Path(env_path).expanduser().resolve() if env_path else _DEFAULT_MODEL_PATH
-
-    if model_path.exists():
-        return str(model_path)
-
-    model_path.parent.mkdir(parents=True, exist_ok=True)
-
-    # Try optional download path (kept non-fatal if gdown is missing)
-    try:
-        import gdown  # lazy import so app can start without it
-    except ModuleNotFoundError:
-        raise FileNotFoundError(
-            "Model file not found.\n"
-            f"- Looked for: {model_path}\n"
-            "- Fix: either place the .keras file there, or set env var GLAUCOMA_MODEL_PATH.\n"
-            "- Optional: `pip install gdown` to enable auto-download."
-        )
+   
 
     # Allow overriding the download reference via env var, and support full share links.
     gdrive_ref = os.getenv("GLAUCOMA_MODEL_GDRIVE_URL") or GDRIVE_MODEL_REF
