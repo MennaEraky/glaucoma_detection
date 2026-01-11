@@ -68,14 +68,14 @@ def app():
     st.dataframe(df_arch, use_container_width=True)
 
     metric_arch = st.selectbox(
-        "Select metric (Pretrained CNN)",
+        "Select metric (Transfer Learning Models (ImageNet)",
         ["Accuracy", "Precision", "Recall", "F1", "AUC"]
     )
 
     fig2, ax2 = plt.subplots(figsize=(8, 5))
     ax2.bar(df_arch["Model"], df_arch[metric_arch], color="orange")
     ax2.set_ylabel(metric_arch)
-    ax2.set_title(f"{metric_arch} – Pretrained CNN Backbones")
+    ax2.set_title(f"{metric_arch} – Transfer Learning  (ImageNet)")
     plt.xticks(rotation=30)
     plt.tight_layout()
     st.pyplot(fig2)
@@ -100,14 +100,14 @@ def app():
     st.dataframe(df_pretrain, use_container_width=True)
 
     metric_pretrain = st.selectbox(
-        "Select metric (Pretraining)",
+        "Select metric (Transfer Learning )",
         ["Accuracy", "Precision", "Recall", "F1_Score", "AUC"]
     )
 
     fig1, ax1 = plt.subplots(figsize=(8, 5))
     ax1.bar(df_pretrain["Model"], df_pretrain[metric_pretrain], color="skyblue")
     ax1.set_ylabel(metric_pretrain)
-    ax1.set_title(f"{metric_pretrain} – Pretraining Comparison")
+    ax1.set_title(f"{metric_pretrain} – Transfer Learning  Comparison")
     plt.xticks(rotation=20)
     plt.tight_layout()
     st.pyplot(fig1)
@@ -131,10 +131,10 @@ def app():
     st.caption("Unifies metrics across all sections so you can compare everything side-by-side.")
 
     df_pretrain_all = df_pretrain.rename(columns={"F1_Score": "F1"}).copy()
-    df_pretrain_all["Category"] = "Pretraining"
+    df_pretrain_all["Category"] = "Transfer Learning Models Medical Weights "
 
     df_arch_all = df_arch.copy()
-    df_arch_all["Category"] = "Pretrained CNN"
+    df_arch_all["Category"] = "Transfer Learning Models  (ImageNet)"
 
     df_classical_all = df_classical.rename(columns={"F1_Score": "F1"}).copy()
     df_classical_all["Category"] = "Classical ML"
