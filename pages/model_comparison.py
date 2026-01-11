@@ -180,8 +180,8 @@ def app():
     fig4, ax4 = plt.subplots(figsize=(10, 5))
     colors = df_plot["Category"].map(
         {
-            "Pretraining": "skyblue",
-            "Pretrained CNN": "orange",
+            "Transfer Learning Medical Weight": "skyblue",
+            "Transfer Learning Imagenet": "orange",
             "Classical ML": "green",
         }
     ).fillna("gray")
