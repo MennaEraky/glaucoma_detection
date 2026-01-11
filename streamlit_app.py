@@ -56,19 +56,8 @@ resolution of **224 × 224** pixels to ensure compatibility with standard CNN ar
 """
     )
 
-with st.expander("🧼 3.1) Data Preprocessing", expanded=False):
-    st.markdown(
-        """
-The following preprocessing steps are applied:
 
-- 📏 Image resizing to a uniform input size
-- 🎚️ Normalization of pixel intensity values
-- 🔁 Data augmentation (e.g., rotation, flipping, brightness adjustment) to improve model robustness and reduce overfitting
-- 🧪 Splitting the dataset into training, validation, and test sets
-"""
-    )
-
-with st.expander("🧩 3.2) Dataset Challenges", expanded=False):
+with st.expander("🧩 3.1) Dataset Challenges", expanded=False):
     st.markdown(
         """
 - **Class imbalance**: Glaucoma cases are often underrepresented compared to healthy samples
