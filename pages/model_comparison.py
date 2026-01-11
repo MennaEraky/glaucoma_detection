@@ -90,10 +90,10 @@ def app():
             "DenseNet121_Fundus",
             "ResNet50_Fundus"
         ],
-        "Precision": [0.899038, 0.856846, 0.716904],
-        "Recall":    [0.748, 0.826, 0.704],
-        "F1_Score":  [0.816594, 0.841141, 0.710394],
-        "Accuracy":  [0.870170, 0.879444, 0.778207]
+        "Precision": [0.8398, 0.8361, 0.8389],
+        "Recall":    [0.818, 0.796, 0.802],
+        "F1_Score":  [0.8288, 0.8156, 0.8200],
+        "Accuracy":  [0.8694, 0.8609, 0.8640]
     }
     df_pretrain = pd.DataFrame(pretraining_data)
     st.dataframe(df_pretrain, use_container_width=True)
