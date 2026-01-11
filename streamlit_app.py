@@ -1,6 +1,6 @@
 import streamlit as st
-import app_pages.test_model as test_model
-import app_pages.model_comparison as model_comparison
+import pages.test_model as test_model
+import pages.model_comparison as model_comparison
 
 st.set_page_config(
     page_title="Glaucoma Detection System",
