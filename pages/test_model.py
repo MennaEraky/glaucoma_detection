@@ -9,6 +9,7 @@ IMG_SIZE = (224, 224)
 def app():
     st.title("🖼️ Test Glaucoma Detection Model")
 
+
     @st.cache_resource
     def load_model():
         # Lazy-import tensorflow so the UI can still load even if TF isn't installed.
@@ -65,3 +66,7 @@ def app():
                 st.success("✅ Normal fundus detected")
 
     st.caption("⚕️ For research purposes only – not a medical diagnosis.")
+
+
+# Streamlit runs page files directly; render the page automatically.
+app()
