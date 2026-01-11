@@ -49,9 +49,10 @@ def app():
     st.pyplot(fig3)
 
     # =====================================================
-    # 2. CNN Architecture Comparison
+    # 2. Pretrained CNN Backbone Comparison
     # =====================================================
-    st.header("🏗️ CNN Architecture Comparison (Threshold = 0.5)")
+    st.header("🏗️ Pretrained CNN Backbones (Threshold = 0.5)")
+    st.caption("These are CNN backbone architectures typically used with pretrained weights (transfer learning).")
     architecture_data = {
         "Model": [
             "ResNet50", "DenseNet121", "VGG16",
@@ -68,14 +69,14 @@ def app():
     st.dataframe(df_arch, use_container_width=True)
 
     metric_arch = st.selectbox(
-        "Select metric (Architecture)",
+        "Select metric (Pretrained CNN)",
         ["Accuracy", "Precision", "Recall", "F1", "AUC"]
     )
 
     fig2, ax2 = plt.subplots(figsize=(8, 5))
     ax2.bar(df_arch["Model"], df_arch[metric_arch], color="orange")
     ax2.set_ylabel(metric_arch)
-    ax2.set_title(f"{metric_arch} – CNN Architecture Comparison")
+    ax2.set_title(f"{metric_arch} – Pretrained CNN Backbones")
     plt.xticks(rotation=30)
     plt.tight_layout()
     st.pyplot(fig2)
@@ -133,7 +134,7 @@ def app():
     df_pretrain_all["Category"] = "Pretraining"
 
     df_arch_all = df_arch.copy()
-    df_arch_all["Category"] = "CNN Architecture"
+    df_arch_all["Category"] = "Pretrained CNN"
 
     df_classical_all = df_classical.rename(columns={"F1_Score": "F1"}).copy()
     df_classical_all["Category"] = "Classical ML"
@@ -172,7 +173,7 @@ def app():
     colors = df_plot["Category"].map(
         {
             "Pretraining": "skyblue",
-            "CNN Architecture": "orange",
+            "Pretrained CNN": "orange",
             "Classical ML": "green",
         }
     ).fillna("gray")
