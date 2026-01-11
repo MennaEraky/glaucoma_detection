@@ -1,5 +1,5 @@
 import streamlit as st
-import pages.1_Test_Model as test_model
+import pages.test_model as test_model
 import pages.2_Model_Comparison as model_comparison
 
 # 1. Page Configuration
