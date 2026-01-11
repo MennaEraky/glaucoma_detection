@@ -87,6 +87,8 @@ def get_model_path() -> str:
     # fuzzy=True lets gdown handle various Drive URL formats, including /file/d/... links.
     try:
         out = gdown.download(url, str(model_path), quiet=False, fuzzy=True)
+        st.info("Model Downloaded Succesfuly ✅.")
+
     except Exception as e:
         raise RuntimeError(
             "Failed to download the model from Google Drive.\n"
