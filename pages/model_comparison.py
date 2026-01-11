@@ -49,37 +49,6 @@ def app():
     st.pyplot(fig3)
 
     # =====================================================
-    # 1. Pretraining Strategy Comparison (Transfer Learning)
-    # =====================================================
-    st.header("🧠 Pretraining Strategy Comparison")
-    pretraining_data = {
-        "Model": [
-            "DenseNet121_CheXNet",
-            "DenseNet121_Fundus",
-            "ResNet50_Fundus"
-        ],
-        "Precision": [0.899038, 0.856846, 0.716904],
-        "Recall":    [0.748, 0.826, 0.704],
-        "F1_Score":  [0.816594, 0.841141, 0.710394],
-        "Accuracy":  [0.870170, 0.879444, 0.778207]
-    }
-    df_pretrain = pd.DataFrame(pretraining_data)
-    st.dataframe(df_pretrain, use_container_width=True)
-
-    metric_pretrain = st.selectbox(
-        "Select metric (Pretraining)",
-        ["Accuracy", "Precision", "Recall", "F1_Score"]
-    )
-
-    fig1, ax1 = plt.subplots(figsize=(8, 5))
-    ax1.bar(df_pretrain["Model"], df_pretrain[metric_pretrain], color="skyblue")
-    ax1.set_ylabel(metric_pretrain)
-    ax1.set_title(f"{metric_pretrain} – Pretraining Comparison")
-    plt.xticks(rotation=20)
-    plt.tight_layout()
-    st.pyplot(fig1)
-
-    # =====================================================
     # 2. CNN Architecture Comparison
     # =====================================================
     st.header("🏗️ CNN Architecture Comparison (Threshold = 0.5)")
@@ -110,6 +79,37 @@ def app():
     plt.xticks(rotation=30)
     plt.tight_layout()
     st.pyplot(fig2)
+
+    # =====================================================
+    # 1. Pretraining Strategy Comparison (Transfer Learning)
+    # =====================================================
+    st.header("🧠 Transfer Learning Models Comparison")
+    pretraining_data = {
+        "Model": [
+            "DenseNet121_CheXNet",
+            "DenseNet121_Fundus",
+            "ResNet50_Fundus"
+        ],
+        "Precision": [0.899038, 0.856846, 0.716904],
+        "Recall":    [0.748, 0.826, 0.704],
+        "F1_Score":  [0.816594, 0.841141, 0.710394],
+        "Accuracy":  [0.870170, 0.879444, 0.778207]
+    }
+    df_pretrain = pd.DataFrame(pretraining_data)
+    st.dataframe(df_pretrain, use_container_width=True)
+
+    metric_pretrain = st.selectbox(
+        "Select metric (Pretraining)",
+        ["Accuracy", "Precision", "Recall", "F1_Score"]
+    )
+
+    fig1, ax1 = plt.subplots(figsize=(8, 5))
+    ax1.bar(df_pretrain["Model"], df_pretrain[metric_pretrain], color="skyblue")
+    ax1.set_ylabel(metric_pretrain)
+    ax1.set_title(f"{metric_pretrain} – Pretraining Comparison")
+    plt.xticks(rotation=20)
+    plt.tight_layout()
+    st.pyplot(fig1)
 
     # =====================================================
     # Notes
