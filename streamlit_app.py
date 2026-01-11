@@ -18,7 +18,7 @@ st.markdown(
 **Quick facts (at a glance):**
 - 🧿 **Imaging**: Retinal fundus photographs (optic disc-centered)
 - 🧩 **Task**: Binary classification → **Normal** vs **Glaucoma**
-- 📐 **Input size**: **224 × 224**
+- 📐 **Input size**: **512 × 512**
 """
 )
 
@@ -52,7 +52,7 @@ classification. Each image is labeled as either:
 
 The images are RGB color fundus photographs centered on the optic disc region, which is the primary
 anatomical area affected by glaucoma. Prior to model training, the images are resized to a fixed
-resolution of **224 × 224** pixels to ensure compatibility with standard CNN architectures.
+resolution of **512 × 512** pixels to ensure compatibility with standard CNN architectures.
 """
     )
 
